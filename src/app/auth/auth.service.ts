@@ -69,6 +69,16 @@ export class AuthService {
       );
   }
 
+  logout() {
+    this.user.next(null);
+    this.router.navigate(['/auth']);
+    localStorage.removeItem('userData');
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
+  }
+  
   autoLogin() {
     const userData: {
       email: string;
@@ -94,16 +104,6 @@ export class AuthService {
         new Date().getTime();
       this.autoLogout(expirationDuration);
     }
-  }
-
-  logout() {
-    this.user.next(null);
-    this.router.navigate(['/auth']);
-    localStorage.removeItem('userData');
-    if (this.tokenExpirationTimer) {
-      clearTimeout(this.tokenExpirationTimer);
-    }
-    this.tokenExpirationTimer = null;
   }
 
   autoLogout(expirationDuration: number) {
